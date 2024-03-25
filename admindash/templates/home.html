@@ -1,0 +1,66 @@
+{% extends "base.html" %} {% block content %}
+
+<h1
+  class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl text-center mt-3"
+>
+  Welcome Admin
+</h1>
+
+<div class="flex justify-evenly mt-20">
+  <div
+    class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+  >
+    <img
+      class="w-full h-60 rounded-t-lg object-cover"
+      src="https://img.freepik.com/free-vector/workout-concept-illustration_114360-1148.jpg?w=740&t=st=1711039369~exp=1711039969~hmac=7f3bad5655ff1ea4e8379226ab035d4ca4552d508d08f5393b17cc1a1e264ce3"
+      alt=""
+    />
+
+    <div class="p-5">
+      <h5
+        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+      >
+        Add Exercises
+      </h5>
+
+      <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+        Add new exercises for your clients.You can also edit existing exercises.
+      </p>
+      <a
+        href="{% url 'exercises' %}"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        Add
+      </a>
+    </div>
+  </div>
+
+  <div
+    class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+  >
+    <img
+      class="w-full h-60 rounded-t-lg object-cover"
+      src="https://img.freepik.com/free-vector/fitness-clubs-gyms-pandemic-regulations-abstract-concept-illustration-covid19-business-restrictions-ease-social-distancing-clean-equipment-training-session_335657-218.jpg?w=740&t=st=1711038997~exp=1711039597~hmac=85a9bd823ca7d1a9af387557e220c2d943ef22df7620d62ce83c2d6377fc5746"
+      alt=""
+    />
+    <div class="p-5">
+      <h5
+        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+      >
+        Create Workout
+      </h5>
+
+      <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+        Create a workout plan or edit an existing one. You can add exercises to
+        the workout plan.
+      </p>
+      <a
+        href="{%url 'exercises'%}"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        Create
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
