@@ -2,15 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
-focus_choices = (('abs','abs'),('arms_and_back','arms and back'),('chest','chest'),('legs','legs'))
-
-class Exercises(models.Model):
-    name=models.CharField(max_length=100)
-    desc=models.CharField(max_length=500)
-    focus=models.CharField(max_length=15,choices=focus_choices)
-
-    def __str__(self):
-        return self.name
 
 class AppUsers(AbstractUser):
     profile_pic=models.ImageField(upload_to='users')

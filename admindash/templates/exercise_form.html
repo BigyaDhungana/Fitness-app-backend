@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block content %}
+<div class="border border-red-400 flex justify-center h-screen items-center">
+  <div class="border border-black p-6">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %} {% for field in form %}
+      <div class="flex items-center gap-5">
+        <label class="text-black font-bold" for="{{ field.auto_id }}"
+          >{{ field.label }}</label
+        >
+        {{ field }}
+      </div>
+      {% endfor %}
+      <div class="flex justify-center">
+        <button
+          type="submit"
+          class="bg-blue-600 text-white font-serif font-bold rounded-md border border-blue-600 px-3 py-2 cursor-pointer hover:bg-white hover:text-blue-600 mt-3"
+          value="submit"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

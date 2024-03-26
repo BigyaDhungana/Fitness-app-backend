@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'admindash',
+    'exercises',
     'compressor',#tailwind
     'rest_framework.authtoken',
     'django_apscheduler'#scheduler
