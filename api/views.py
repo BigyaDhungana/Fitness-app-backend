@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from .models import AppUsers
-from .serializers import UserSerializer 
+from .models import AppUsers,UserDetails
+from .serializers import UserSerializer,UserDetailsSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth import authenticate,logout,login
+from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 # Create your views here.
 
@@ -53,16 +53,16 @@ def login_user(request):
             return Response({"error":"Invalid credentials"},status=status.HTTP_401_UNAUTHORIZED)
 
 
-@api_view(['GET'])
-def get_exercise(requset):
-    """"
-    Get all exercises
-    """
+# @api_view(['GET'])
+# def get_exercise(requset):
+#     """"
+#     Get all exercises
+#     """
     
-    if (requset.user.is_authenticated):
-        return Response({'success':"this works"},status=status.HTTP_200_OK)
-    else:
-        return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
+#     if (requset.user.is_authenticated):
+#         return Response({'success':"this works"},status=status.HTTP_200_OK)
+#     else:
+#         return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
     
     
 
@@ -73,8 +73,36 @@ def logout_user(request):
     Logout
     """
     try :
-        print(request.user.auth_token)
         request.user.auth_token.delete()
         return Response({"success":"User logged out"},status=status.HTTP_200_OK)
     except:
         return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['PUT','GET'])
+def add_user_details(request):
+    """ 
+    PUT: Route to add/modify users height or gender
+    GET: Route to get user gender and height
+    """
+    if (request.method=="PUT"):
+        try :
+            if (request.user.is_authenticated):
+                if (request.data.get('gender') and request.data.get('height')):
+                    user_detail,created=UserDetails.objects.update_or_create(user=request.user,defaults={"height":float(request.data['height']),"gender":request.data["gender"]})
+                    print(user_detail)
+                    print("hi")
+                return Response({"success":"true"})
+            else :
+                return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as error:
+            print(error)
+            return Response({"error":"Bad request"},status=status.HTTP_400_BAD_REQUEST)
+        
+    elif(request.method=="GET"):    
+            if (request.user.is_authenticated):
+                user_detail=UserDetails.objects.get(user=request.user)
+                serializer=UserDetailsSerializer(user_detail,many=False)
+                return Response(serializer.data,status=status.HTTP_200_OK)
+            else:
+                return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
