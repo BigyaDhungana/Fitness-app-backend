@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .forms import AddExerciseForm
 from exercises.models import Exercises
+from django.http import HttpResponse
 # Create your views here.
 
 def exercise_view(request):
@@ -12,18 +13,36 @@ def exercise_view(request):
 def home(request):
     return render(request,"home.html")
 
-def create_edit_exercises(request):
+def create_exercises(request):
     form=AddExerciseForm()
     context={"form":form}
 
     if request.method=="POST":
         form=AddExerciseForm(request.POST,request.FILES)
-        print("----------------------------------------------------------------")
         if form.is_valid():
             form.save()
             return redirect("exercises")
         else:
             print(form.errors)
 
-
     return render(request,"exercise_form.html",context)
+
+def edit_exercise(request,id):
+    exercise_instance=Exercises.objects.get(id=id)
+    form=AddExerciseForm(instance=exercise_instance)
+
+    if (request.method=="POST"):
+        form=AddExerciseForm(request.POST,request.FILES,instance=exercise_instance)
+        if form.is_valid():
+            form.save()
+            return redirect("exercises")
+
+    context={"form":form}
+    return render(request,"exercise_form.html",context=context)
+
+def delete_exercise(request,id):
+    try:
+        Exercises.objects.get(id=id).delete()
+    except:
+        return HttpResponse("<h1>Something went wrong</h1>")
+    return redirect("exercises")
