@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./admindash/templates/**/*.html"],
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        128: "32rem",
+      },
+    },
   },
   plugins: [],
 };

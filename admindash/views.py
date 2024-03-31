@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
-from .forms import AddExerciseForm
-from exercises.models import Exercises
+from .forms import AddExerciseForm,AddWorkoutNameForm
+from exercises.models import Exercises,PreDefinedWorkoutNames,PreDefinedWorkouts
 from django.http import HttpResponse
 # Create your views here.
 
@@ -46,3 +46,11 @@ def delete_exercise(request,id):
     except:
         return HttpResponse("<h1>Something went wrong</h1>")
     return redirect("exercises")
+
+def all_workouts(request):
+    selected_id=request.GET.get('id')
+    print(selected_id,"heh")
+    workout_name_form=AddWorkoutNameForm()
+    workouts=PreDefinedWorkoutNames.objects.all()
+    context={'workouts':workouts,"workout_name_form":workout_name_form}
+    return render(request,"allworkouts.html",context=context)

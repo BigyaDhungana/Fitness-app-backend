@@ -13,3 +13,12 @@ class Exercises(models.Model):
     def __str__(self):
         return self.name
     
+class PreDefinedWorkoutNames(models.Model):
+    name=models.CharField(max_length=100)
+
+class PreDefinedWorkouts(models.Model):
+    name=models.ForeignKey(PreDefinedWorkoutNames,on_delete=models.CASCADE)
+    reps=models.IntegerField(null=True)
+    time=models.IntegerField(null=True)
+    order=models.IntegerField()
+    exercise=models.ForeignKey(Exercises,on_delete=models.CASCADE)
