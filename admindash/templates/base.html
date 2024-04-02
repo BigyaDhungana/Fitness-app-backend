@@ -11,6 +11,14 @@
     {% compress css %}
     <link rel="stylesheet" href="{% static 'src/output.css' %}" />
     {% endcompress %}
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/toastr.min.css' %}"
+      media="all"
+    />
+    <script type="text/javascript" src="{% static 'js/toastr.js' %}"></script>
   </head>
 
   <body>

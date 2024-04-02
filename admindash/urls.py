@@ -9,4 +9,5 @@ urlpatterns = [
     ,path("edit-exercise/<str:id>",views.edit_exercise,name="edit-exercise"),
     path("delete-exercise/<str:id>",views.delete_exercise,name="delete-exercise"),
     path("all-workouts/",views.all_workouts,name="all-workouts"),
+    path("create-workout/",views.create_workout,name="create-workout"),
 ]

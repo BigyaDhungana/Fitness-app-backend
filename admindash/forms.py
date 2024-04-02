@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from exercises.models import Exercises,PreDefinedWorkoutNames
+from exercises.models import Exercises,PreDefinedWorkoutNames,PreDefinedWorkouts
 from django import forms
 
 class AddExerciseForm(ModelForm):
@@ -43,4 +43,8 @@ class AddWorkoutNameForm(ModelForm):
                 }
             ),
         }
-       
+
+class AddExerciseToWorkoutForm(ModelForm):
+    class Meta:
+        model = PreDefinedWorkouts
+        exclude=["name","time","time"]

@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
-from .forms import AddExerciseForm,AddWorkoutNameForm
+from .forms import AddExerciseForm,AddWorkoutNameForm,AddExerciseToWorkoutForm
 from exercises.models import Exercises,PreDefinedWorkoutNames,PreDefinedWorkouts
 from django.http import HttpResponse
+from django.contrib import messages
 # Create your views here.
 
 def exercise_view(request):
@@ -49,8 +50,34 @@ def delete_exercise(request,id):
 
 def all_workouts(request):
     selected_id=request.GET.get('id')
-    print(selected_id,"heh")
+    if selected_id is None:
+        param_present=False
+    else :
+        param_present=True
     workout_name_form=AddWorkoutNameForm()
+    add_to_workout_form=AddExerciseToWorkoutForm()
     workouts=PreDefinedWorkoutNames.objects.all()
-    context={'workouts':workouts,"workout_name_form":workout_name_form}
+
+    if param_present:
+        selected_workout=PreDefinedWorkoutNames.objects.get(id=selected_id)
+        print(selected_workout)
+    # if request.method=="POST":
+    #     print(request.POST.get('form_type'))
+    #     workout_name_form=AddWorkoutNameForm(request.POST)
+    #     #print(request.POST)
+
+
+    context={'workouts':workouts,"workout_name_form":workout_name_form,"add_to_workout_form":add_to_workout_form,'param_present':param_present,'selected_id':selected_id}
     return render(request,"allworkouts.html",context=context)
+
+def create_workout(request):
+    form=AddWorkoutNameForm()
+    if request.method=="POST":
+        form=AddWorkoutNameForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("all-workouts")
+        else:
+            messages.error(request,"Name already exists")
+            return redirect('all-workouts')
+    return redirect("all-workouts")

@@ -14,7 +14,10 @@ class Exercises(models.Model):
         return self.name
     
 class PreDefinedWorkoutNames(models.Model):
-    name=models.CharField(max_length=100)
+    name=models.CharField(max_length=100,unique=True)
+
+    def __str__(self):
+        return self.name
 
 class PreDefinedWorkouts(models.Model):
     name=models.ForeignKey(PreDefinedWorkoutNames,on_delete=models.CASCADE)
