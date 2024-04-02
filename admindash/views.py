@@ -8,7 +8,6 @@ from django.contrib import messages
 def exercise_view(request):
     all_exercises=Exercises.objects.all()
     context={"exercise_list":all_exercises}
-    # print(all_exercises[0].name)
     return render(request,"exercises.html",context=context)
 
 def home(request):
@@ -52,22 +51,33 @@ def all_workouts(request):
     selected_id=request.GET.get('id')
     if selected_id is None:
         param_present=False
+        all_exercises_in_workout=""
     else :
         param_present=True
+        all_exercises_in_workout=PreDefinedWorkouts.objects.filter(name=selected_id).order_by('added_datetime')
+        
     workout_name_form=AddWorkoutNameForm()
     add_to_workout_form=AddExerciseToWorkoutForm()
     workouts=PreDefinedWorkoutNames.objects.all()
+    try:
+        if param_present:
+            selected_workout=PreDefinedWorkoutNames.objects.get(id=selected_id)
+            if request.method=="POST":
+                add_to_workout_form=AddExerciseToWorkoutForm(request.POST)
+                if add_to_workout_form.is_valid():
+                    form_instance=add_to_workout_form.clean()
+                    if form_instance['type']=='Reps':
+                        time=None
+                        reps=form_instance['reps']
+                    else:
+                        time=form_instance['reps']
+                        reps=None
+                    PreDefinedWorkouts.objects.create(name=selected_workout,exercise=form_instance['exercise'],reps=reps,time=time)
+    except:
+        messages.error(request,"Invalid page request")
+        return redirect('all-workouts')
 
-    if param_present:
-        selected_workout=PreDefinedWorkoutNames.objects.get(id=selected_id)
-        print(selected_workout)
-    # if request.method=="POST":
-    #     print(request.POST.get('form_type'))
-    #     workout_name_form=AddWorkoutNameForm(request.POST)
-    #     #print(request.POST)
-
-
-    context={'workouts':workouts,"workout_name_form":workout_name_form,"add_to_workout_form":add_to_workout_form,'param_present':param_present,'selected_id':selected_id}
+    context={'workouts':workouts,"workout_name_form":workout_name_form,"add_to_workout_form":add_to_workout_form,'param_present':param_present,'selected_id':selected_id,'all_exercises':all_exercises_in_workout}
     return render(request,"allworkouts.html",context=context)
 
 def create_workout(request):
@@ -80,4 +90,12 @@ def create_workout(request):
         else:
             messages.error(request,"Name already exists")
             return redirect('all-workouts')
+    return redirect("all-workouts")
+
+def delete_exercise_from_workout(request,id):
+    try:
+        PreDefinedWorkouts.objects.get(id=id).delete()
+    except:
+        print()
+        return HttpResponse("<h1>Something went wrong</h1>")
     return redirect("all-workouts")

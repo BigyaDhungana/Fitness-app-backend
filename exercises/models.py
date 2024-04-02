@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 # Create your models here.
 
 focus_choices = (('abs','abs'),('shoulder_and_back','shoulder and back'),('chest','chest'),('legs','legs'),('arms','arms'))
@@ -23,5 +23,9 @@ class PreDefinedWorkouts(models.Model):
     name=models.ForeignKey(PreDefinedWorkoutNames,on_delete=models.CASCADE)
     reps=models.IntegerField(null=True)
     time=models.IntegerField(null=True)
-    order=models.IntegerField()
     exercise=models.ForeignKey(Exercises,on_delete=models.CASCADE)
+    added_datetime=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name.name
+ 

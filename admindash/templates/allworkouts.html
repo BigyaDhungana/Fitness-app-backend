@@ -86,7 +86,7 @@
                 </svg>
                 <div>
                   <h2 class="title-font font-medium text-xl text-gray-900">
-                    2.7K
+                    {{all_exercises|length}}
                   </h2>
                   <p class="leading-relaxed">Exercises</p>
                 </div>
@@ -102,13 +102,79 @@
         Add
       </button>
     </div>
+    <section class="container mx-auto p-6 font-mono">
+  <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+    <div class="w-full overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr
+            class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600"
+          >
+            <th class="px-4 py-3">Exercise</th>
+            <th class="px-4 py-3">Reps</th>
+            <th class="px-4 py-3">Time</th>
+            <th class="px-4 py-3">Gif</th>
+            <th class="px-4 py-3">order</th>
+            <th class="px-4 py-3">Options</th>
+
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          {% for exercise in all_exercises %}
+          <tr class="text-gray-700">
+            <td class="px-4 py-3 border">
+              <div class="flex items-center text-sm">
+                <div>
+                  <p class="font-semibold text-black">{{exercise.exercise}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-ms font-semibold border">
+              {{exercise.reps}}
+            </td>
+            <td class="px-4 py-3 text-ms font-semibold border">
+            
+                {{exercise.time}}
+             
+            </td>
+            <td class="px-4 py-3 text-sm border">
+              <div class="relative w-12 h-12 mr-3 md:block">
+                  <img
+                  class="object-cover w-full h-full"
+                  src="../../media/{{exercise.exercise.gif}}"
+                  alt=""
+                  loading="lazy"
+                /> 
+                
+              </div>
+            </td>
+            <td class="px-4 py-3 border">{{ forloop.counter }}</td>
+            <td class="px-4 py-3 text-sm border">
+                <a
+                  class="hover:bg-red-300"
+                  id="delete"
+                  href="{% url 'delete-from-workout' exercise.id%}"
+                  >Delete</a
+                >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
       {% else %}
     
     {% endif %}
     <div
       class="absolute top-1/3 left-1/2 bg-green-400 border border-red-700 hidden" id="addWorkoutModal"
     >
+    <form method="post">
+{% csrf_token %}
       {{add_to_workout_form}}
+        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 w-20 rounded ">Add</button>
+    </form>
     </div>
   
   </div>

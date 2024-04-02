@@ -44,7 +44,7 @@ class AddWorkoutNameForm(ModelForm):
             ),
         }
 
-class AddExerciseToWorkoutForm(ModelForm):
-    class Meta:
-        model = PreDefinedWorkouts
-        exclude=["name","time","time"]
+class AddExerciseToWorkoutForm(forms.Form):
+    exercise=forms.ModelChoiceField(queryset=Exercises.objects.all(),empty_label="Select a Exercise")
+    reps=forms.IntegerField(label="Reps/Time(in seconds)")
+    type=forms.ChoiceField(choices=(('Reps','Reps'),('Time','Time')),widget=forms.RadioSelect)
