@@ -3,6 +3,7 @@ from .forms import AddExerciseForm,AddWorkoutNameForm,AddExerciseToWorkoutForm
 from exercises.models import Exercises,PreDefinedWorkoutNames,PreDefinedWorkouts
 from django.http import HttpResponse
 from django.contrib import messages
+from django.urls import reverse
 # Create your views here.
 
 def exercise_view(request):
@@ -21,6 +22,7 @@ def create_exercises(request):
         form=AddExerciseForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
+            form=AddExerciseForm()
             return redirect("exercises")
         else:
             print(form.errors)
@@ -73,6 +75,7 @@ def all_workouts(request):
                         time=form_instance['reps']
                         reps=None
                     PreDefinedWorkouts.objects.create(name=selected_workout,exercise=form_instance['exercise'],reps=reps,time=time)
+                    return redirect(reverse('all-workouts')+'?id='+str(selected_id))
     except:
         messages.error(request,"Invalid page request")
         return redirect('all-workouts')
@@ -94,8 +97,17 @@ def create_workout(request):
 
 def delete_exercise_from_workout(request,id):
     try:
+        workout_name_id=PreDefinedWorkouts.objects.get(id=id).name.id
         PreDefinedWorkouts.objects.get(id=id).delete()
+        pass
     except:
         print()
+        return HttpResponse("<h1>Something went wrong</h1>")
+    return redirect(reverse("all-workouts")+f"?id={workout_name_id}")
+
+def delete_workout(request,id):
+    try:
+        PreDefinedWorkoutNames.objects.get(id=id).delete()
+    except:
         return HttpResponse("<h1>Something went wrong</h1>")
     return redirect("all-workouts")

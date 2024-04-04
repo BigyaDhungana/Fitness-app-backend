@@ -17,23 +17,23 @@
   >
     <div class="px-4 py-6">
       <button
-        class="grid h-10 w-32 place-content-center rounded-lg bg-gray-100 text-xs text-gray-600"
+        class="grid h-10 w-32 place-content-center rounded-lg bg-gray-100  text-gray-600 hover:text-black"
     id="createWorkout"  >
         Create
       </button>
 
-      <ul class="mt-6 space-y-1">
-        <li>
-          {% for workout in workouts %}
-          <a
-            href="{% url 'all-workouts' %}?id={{workout.id}}"
-            class="block rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 mb-1"
-          >
-            {{workout.name}}
-          </a>
-          {% endfor %}
-        </li>
-      </ul>
+<ul class="mt-6 space-y-1">
+  {% for workout in workouts %}
+  <li>
+    <div class="flex rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 mb-1 justify-between group">
+      <a href="{% url 'all-workouts' %}?id={{workout.id}}" class="">
+        {{ workout.name }}
+      </a>
+      <a href="{% url 'delete-workout' workout.id %}" class="text-red-400 cursor-pointer text-xs hover:underline">delete</a>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
     </div>
   </div>
   <div class="flex-1 overflow-auto cushei">
@@ -184,7 +184,7 @@
     <div class="bg-white h-56 w-96">
     <h1 class="text-center text-blue-500 text-3xl font-bold pt-4 mb-7">Add A New Workout</h1>
     
-    <form method="post" action="{% url 'create-workout' %}">
+    <form method="post" action="{% url 'create-workout' %}" id="nameform">
     {% csrf_token %}
       
       {% for field in workout_name_form %}
@@ -196,11 +196,11 @@
       </div>
       {% endfor %}
 
-<div class="flex items-center justify-evenly ">
+  <div class="flex items-center justify-evenly ">
 
   <button  type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 rounded w-20" id="cancelName" >Cancel</button>
   <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 w-20 rounded ">Add</button>
-</div>  
+  </div>  
     </form>
     </div>
     </div>
@@ -235,6 +235,7 @@
   document.getElementById("cancelName").onclick=()=>{
     document.getElementById('addWorkoutNameModal').classList.remove('flex')
     document.getElementById('addWorkoutNameModal').classList.add('hidden')
+    document.getElementById('nameform').reset();
   };
   document.getElementById("createWorkout").onclick=()=>{
     document.getElementById('addWorkoutNameModal').classList.remove('hidden')

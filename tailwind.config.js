@@ -6,6 +6,7 @@ module.exports = {
       height: {
         128: "32rem",
       },
+      display: ["group-hover"],
     },
   },
   plugins: [],

@@ -11,4 +11,5 @@ urlpatterns = [
     path("all-workouts/",views.all_workouts,name="all-workouts"),
     path("create-workout/",views.create_workout,name="create-workout"),
     path("delete-from-workout/<str:id>",views.delete_exercise_from_workout,name="delete-from-workout"),
+    path("delete-workout/<str:id>",views.delete_workout,name="delete-workout"),
 ]
