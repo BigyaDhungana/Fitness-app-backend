@@ -25,8 +25,8 @@
 <ul class="mt-6 space-y-1">
   {% for workout in workouts %}
   <li>
-    <div class="flex rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 mb-1 justify-between group">
-      <a href="{% url 'all-workouts' %}?id={{workout.id}}" class="">
+    <div class="flex rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 mb-1 justify-between group" id="{{workout.id}}" >
+      <a href="{% url 'all-workouts' %}?id={{workout.id}}" class="" >
         {{ workout.name }}
       </a>
       <a href="{% url 'delete-workout' workout.id %}" class="text-red-400 cursor-pointer text-xs hover:underline">delete</a>
@@ -40,7 +40,7 @@
     {% if param_present %}
     <div class="flex justify-between items-center pt-3 pr-3">
       <section class="text-gray-700 body-font flex-grow mx-auto">
-        <div class="container px-5 py-0 mx-auto">
+        <div class="container px-5 py-0">
           <div class="flex flex-wrap -m-4 text-center">
             <div class="p-4 md:w-1/4 sm:w-1/2 w-full">
               <div
@@ -103,7 +103,7 @@
       </button>
     </div>
     <section class="container mx-auto p-6 font-mono">
-  <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+  <div class="w-full mb-8 overflow-x-hidden rounded-lg shadow-lg">
     <div class="w-full overflow-x-auto">
       <table class="w-full">
         <thead>
@@ -115,7 +115,7 @@
             <th class="px-4 py-3">Time</th>
             <th class="px-4 py-3">Gif</th>
             <th class="px-4 py-3">order</th>
-            <th class="px-4 py-3">Options</th>
+            <th class="px-4 py-3">Actions</th>
 
           </tr>
         </thead>
@@ -167,19 +167,35 @@
       {% else %}
     
     {% endif %}
+
+    <!-- add exercise modal -->
     <div
-      class="absolute top-1/3 left-1/2 bg-green-400 border border-red-700 hidden" id="addWorkoutModal"
+      class="absolute border text-center inset-0 z-10  items-center justify-center bg-gray-600 bg-opacity-50 hidden overflow-hidden" id="addWorkoutModal"
     >
-    <form method="post">
+    <div class="bg-white h-2/4 w-2/5">
+    <h1 class="text-center text-blue-500 text-3xl font-bold pt-4 mb-7">Add Exercise</h1>
+    <form method="post" id="exerciseform">
 {% csrf_token %}
-      {{add_to_workout_form}}
-        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 w-20 rounded ">Add</button>
-    </form>
+            {% for field in add_to_workout_form %}
+      <div class="flex items-center gap-5 justify-center  ">
+        <label class="text-black font-bold" for="{{ field.auto_id }}"
+          >{{ field.label }}</label
+        >
+        {{ field }}
+      </div>
+      {% endfor %}
+         <div class="flex items-center justify-evenly ">
+
+  <button  type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 rounded w-20" id="cancelAdd" >Cancel</button>
+  <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 w-20 rounded ">Add</button>
+  </div>  
+  </form>
     </div>
-  
   </div>
+  
+ <!-- create workout model -->
   <div
-      class="absolute border text-center border-red-700 h-screen z-10 top-0 w-full items-center justify-around bg-gray-600 bg-opacity-50 hidden" id="addWorkoutNameModal"
+      class="absolute border text-center inset-0 z-10 items-center justify-center bg-gray-600 bg-opacity-50 hidden overflow-hidden h-fit" id="addWorkoutNameModal"
     > 
     <div class="bg-white h-56 w-96">
     <h1 class="text-center text-blue-500 text-3xl font-bold pt-4 mb-7">Add A New Workout</h1>
@@ -198,11 +214,10 @@
 
   <div class="flex items-center justify-evenly ">
 
-  <button  type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 rounded w-20" id="cancelName" >Cancel</button>
+  <button  type="button" class="bg-red-500  hover:bg-red-700 text-white font-bold py-2 rounded w-20" id="cancelName" >Cancel</button>
   <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 w-20 rounded ">Add</button>
   </div>  
     </form>
-    </div>
     </div>
   </div>
 </div>
@@ -224,10 +239,18 @@
 
 
 <script>
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id')
+  if(id){
+    document.getElementById(id).classList.add("bg-green-600");
+  }
+
   addbutton=document.getElementById("addWorkout")
   if (addbutton){
     addbutton.onclick = () => {
-    document.getElementById('addWorkoutModal').classList.toggle('hidden')
+    document.getElementById('addWorkoutModal').classList.remove('hidden')
+    document.getElementById('addWorkoutModal').classList.add('flex')
   };
   }
 
@@ -240,8 +263,14 @@
   document.getElementById("createWorkout").onclick=()=>{
     document.getElementById('addWorkoutNameModal').classList.remove('hidden')
     document.getElementById('addWorkoutNameModal').classList.add('flex')
-    console.log('clicked')
   };
+
+    document.getElementById("cancelAdd").onclick=()=>{
+    document.getElementById('addWorkoutModal').classList.remove('flex')
+    document.getElementById('addWorkoutModal').classList.add('hidden')
+    document.getElementById('exerciseform').reset();
+  };
+
   </script>
 
 {% endblock %}

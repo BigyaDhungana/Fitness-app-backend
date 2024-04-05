@@ -45,6 +45,19 @@ class AddWorkoutNameForm(ModelForm):
         }
 
 class AddExerciseToWorkoutForm(forms.Form):
-    exercise=forms.ModelChoiceField(queryset=Exercises.objects.all(),empty_label="Select a Exercise")
-    reps=forms.IntegerField(label="Reps/Time(in seconds)")
-    type=forms.ChoiceField(choices=(('Reps','Reps'),('Time','Time')),widget=forms.RadioSelect)
+    exercise = forms.ModelChoiceField(
+        queryset=Exercises.objects.all(),
+        empty_label="Select an Exercise",
+        widget=forms.Select(attrs={
+            "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 mb-4", 
+        })
+    )
+    reps=forms.IntegerField(label="Reps/Time(in seconds)",widget=forms.NumberInput(attrs={
+        "class":"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  p-2.5  mb-4",
+    }))
+    type=forms.ChoiceField(choices=(('Reps','Reps'),('Time','Time')),widget=forms.RadioSelect(attrs={
+        "class":"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  p-2.5  mb-4",
+    }))
+
+   
+      
