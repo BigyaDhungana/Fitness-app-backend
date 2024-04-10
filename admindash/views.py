@@ -99,7 +99,6 @@ def delete_exercise_from_workout(request,id):
     try:
         workout_name_id=PreDefinedWorkouts.objects.get(id=id).name.id
         PreDefinedWorkouts.objects.get(id=id).delete()
-        pass
     except:
         print()
         return HttpResponse("<h1>Something went wrong</h1>")

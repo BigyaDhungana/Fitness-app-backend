@@ -30,7 +30,7 @@ def register(request):
                 selializer.save()
                 return Response({"success":"User created successfully"},status=status.HTTP_201_CREATED)
             else: 
-                return Response({"error":"Invalid data"},status=status.HTTP_400_BAD_REQUEST)
+                return Response(selializer.errors,status=status.HTTP_400_BAD_REQUEST)
             
 @api_view(['POST'])
 def login_user(request):
