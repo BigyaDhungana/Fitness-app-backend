@@ -28,8 +28,13 @@ def custom_workouts(request):
     """
     if (request.user.is_authenticated):
         if request.method=="GET":
-            all_workouts=CustomWorkoutNames.objects.all()
+            all_workouts=CustomWorkoutNames.objects.filter(user_id=request.user.id)
             serialized_data=CustomWorkoutNameSerializer(all_workouts,many=True)
+
+            for data in serialized_data.data:
+                exercise_no=CustomWorkouts.objects.filter(workout_id=data['id']).count()
+                data['exercise_count']=exercise_no
+
             return Response(serialized_data.data,status=status.HTTP_200_OK)
         elif request.method=="POST":
             try:
@@ -54,6 +59,11 @@ def get_predefined_workouts(request):
     """
     if request.user.is_authenticated:
         serialized_data=PreDefinedWorkoutNamesSeriallizer(PreDefinedWorkoutNames.objects.all(),many=True)
+        
+        for data in serialized_data.data:
+            exercise_no=PreDefinedWorkouts.objects.filter(name_id=data['id']).count()
+            data['exercise_count']=exercise_no
+
         return Response(serialized_data.data,status=status.HTTP_200_OK)
     else:
         return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
@@ -96,12 +106,44 @@ def add_ex_to_workout(request):#wid eid
             if "wid" in request.data and "eid" in request.data:
                 workout=CustomWorkoutNames.objects.get(id=int(request.data['wid']))
                 exercise=Exercises.objects.get(id=int(request.data['eid']))
-                CustomWorkouts.objects.create(workout=workout,reps=int(request.data['quantity']) if "is_reps" else None,time=None if request.data["is_reps"] else int(request.data['quantity']) ,exercise=exercise )
+                CustomWorkouts.objects.create(workout=workout,reps=int(request.data['quantity']) if request.data['is_reps'] else None,time=None if request.data["is_reps"] else int(request.data['quantity']) ,exercise=exercise )
                 return Response({"success":"true"},status=status.HTTP_201_CREATED)
             else:
                 return Response({"error":"Bad request"},status=status.HTTP_400_BAD_REQUEST)
         except Exception as error:
             print(error)
             return Response({"error":"Bad request"},status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
+    
+@api_view(['DELETE'])
+def remove_ex_from_workout(request):
+    """
+    Delete exercise from workout
+    """
+    if request.user.is_authenticated:
+        try:
+            id=request.query_params['id']
+            CustomWorkouts.objects.get(id=id).delete()
+        except:
+            return Response({"error":"Bad request"},status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"success":"Exercise deleted"},status=status.HTTP_200_OK)
+    else:
+        return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
+    
+@api_view(['DELETE'])
+def delete_custom_workout(request):
+    """
+    Delete custom workout
+    """
+    if request.user.is_authenticated:
+        try:
+            id=request.query_params['id']
+            CustomWorkoutNames.objects.get(id=id).delete()
+        except:
+            return Response({"error":"Bad request"},status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"success":"Workout deleted"},status=status.HTTP_200_OK)
     else:
         return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
