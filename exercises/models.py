@@ -10,6 +10,7 @@ class Exercises(models.Model):
     desc=models.CharField(max_length=500)
     focus=models.CharField(max_length=20,choices=focus_choices)
     gif=models.ImageField(upload_to='gifs')
+    met=models.FloatField(null=False)
     def __str__(self):
         return self.name
     
