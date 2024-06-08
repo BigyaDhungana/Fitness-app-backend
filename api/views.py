@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from .models import AppUsers,UserDetails
-from .serializers import UserSerializer,UserDetailsSerializer
+from .models import AppUsers,UserDetails,UserDaily
+from .serializers import UserSerializer,UserDetailsSerializer,UserDailySerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
+from datetime import date,time,datetime
 # Create your views here.
 
 @api_view(['POST'])
@@ -40,7 +41,7 @@ def login_user(request):
     if request.method=="POST":
         username=request.data['username']
         password=request.data['password']
-        print(username,password)
+       
 
         user=authenticate(username=username,password=password)
         
@@ -48,7 +49,7 @@ def login_user(request):
             token_tuple=Token.objects.update_or_create(user=user) #(token,created)
             # print(token_tuple)
             user_info=AppUsers.objects.get(username=username)
-            return Response({"success":"Login successful","first_name":user_info.first_name,"last_name":user_info.last_name,"email":user_info.email,"profile_pic":"/media/"+str(user_info.profile_pic),"token":token_tuple[0].key},status=status.HTTP_200_OK)
+            return Response({"username":user_info.username,"first_name":user_info.first_name,"last_name":user_info.last_name,"email":user_info.email,"profile_pic":"/media/"+str(user_info.profile_pic),"token":token_tuple[0].key},status=status.HTTP_200_OK)
         else:
             return Response({"error":"Invalid credentials"},status=status.HTTP_401_UNAUTHORIZED)
 
@@ -76,10 +77,9 @@ def add_user_details(request):
     if (request.method=="PUT"):
         try :
             if (request.user.is_authenticated):
-                if (request.data.get('gender') and request.data.get('height')):
-                    user_detail,created=UserDetails.objects.update_or_create(user=request.user,defaults={"height":float(request.data['height']),"gender":request.data["gender"]})
-                    print(user_detail)
-                    print("hi")
+                if (request.data.get('gender') and request.data.get('height') and request.data.get('dob')):
+                    user_detail,created=UserDetails.objects.update_or_create(user=request.user,defaults={"height":float(request.data['height']),"gender":request.data["gender"],"dob":request.data["dob"]})
+                    
                 return Response({"success":"true"})
             else :
                 return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
@@ -94,3 +94,32 @@ def add_user_details(request):
                 return Response(serializer.data,status=status.HTTP_200_OK)
             else:
                 return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
+            
+
+@api_view(['PUT'])
+def update_user_daily(request):
+    """Make a request once in a day to add user details to the database"""  
+    if (request.user.is_authenticated):
+        try:
+            userDaily,created=UserDaily.objects.update_or_create(user=request.user,date=date.today(),
+                    defaults={'steps':int(request.data['steps']),'calories':float(request.data['calories']),'water':int(request.data['water']),'weight':float(request.data['weight']),'sleep':float(request.data['sleep'])})
+            return Response({"success":"Created or updated successfully"},status=status.HTTP_200_OK)
+        except:
+            return Response({"error":"Bad request"},status=status.HTTP_400_BAD_REQUEST)
+    else :
+        return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['GET'])
+def get_data_for_graph(request):
+    if (request.user.is_authenticated):
+        print(datetime.now())
+        try:
+            usersinfo=UserDaily.objects.filter(user=request.user).order_by('date')[:30]
+            serialized_data=UserDailySerializer(usersinfo,many=True)
+            return Response(serialized_data.data,status=status.HTTP_200_OK)
+        except:
+            pass 
+    else :
+        return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
+        

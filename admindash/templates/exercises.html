@@ -26,6 +26,7 @@
             <th class="px-4 py-3">Name</th>
             <th class="px-4 py-3">Description</th>
             <th class="px-4 py-3">Focus</th>
+            <th class="px-4 py-3">MET</th>
             <th class="px-4 py-3">GIF</th>
             <th class="px-4 py-3 w-4">Options</th>
           </tr>
@@ -49,6 +50,13 @@
                 class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm"
               >
                 {{exercise.focus}}
+              </span>
+            </td>
+             <td class="px-4 py-3 text-xs border">
+              <span
+                class="px-1 py-1 font-semibold leading-tight  bg-red-100 rounded-sm"
+              >
+                {{exercise.met}}
               </span>
             </td>
             <td class="px-4 py-3 text-sm border">

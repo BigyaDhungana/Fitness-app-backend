@@ -19,12 +19,13 @@ class CustomWorkoutsAdmin(admin.ModelAdmin):
     list_display=[f.name for f in CustomWorkouts._meta.fields]
 class CustomWorkoutsNameAdmin(admin.ModelAdmin):
     list_display=[f.name for f in CustomWorkoutNames._meta.fields]
-
+class UsersDailyAdmin(admin.ModelAdmin):
+    list_display=[f.name for f in UserDaily._meta.fields]
 
 
 admin.site.register(AppUsers,AppUsersAdmin)
 admin.site.register(Exercises,ExerciseAdmin)
-#admin.site.register(UserDaily)
+admin.site.register(UserDaily,UsersDailyAdmin)
 admin.site.register(UserDetails,UserDetailsAdmin)
 admin.site.register(PreDefinedWorkoutNames,WorkoutNamesAdmin)
 admin.site.register(PreDefinedWorkouts,PreWorkoutsAdmin)

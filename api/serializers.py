@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import AppUsers,UserDetails
+from .models import AppUsers,UserDetails,UserDaily
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,4 +13,9 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model=UserDetails
+        exclude=['user']
+
+class UserDailySerializer(serializers.ModelSerializer):
+    class Meta:
+        model=UserDaily
         exclude=['user']
