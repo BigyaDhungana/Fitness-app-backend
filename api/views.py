@@ -104,7 +104,8 @@ def update_user_daily(request):
             userDaily,created=UserDaily.objects.update_or_create(user=request.user,date=date.today(),
                     defaults={'steps':int(request.data['steps']),'calories':float(request.data['calories']),'water':int(request.data['water']),'weight':float(request.data['weight']),'sleep':float(request.data['sleep'])})
             return Response({"success":"Created or updated successfully"},status=status.HTTP_200_OK)
-        except:
+        except Exception as error:
+            print(error)
             return Response({"error":"Bad request"},status=status.HTTP_400_BAD_REQUEST)
     else :
         return Response({"error":"User not logged in"},status=status.HTTP_401_UNAUTHORIZED)
