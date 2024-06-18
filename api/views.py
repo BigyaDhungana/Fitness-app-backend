@@ -44,12 +44,19 @@ def login_user(request):
        
 
         user=authenticate(username=username,password=password)
-        
+        is_new_user=False
         if user is not None:
             token_tuple=Token.objects.update_or_create(user=user) #(token,created)
             # print(token_tuple)
             user_info=AppUsers.objects.get(username=username)
-            return Response({"username":user_info.username,"first_name":user_info.first_name,"last_name":user_info.last_name,"email":user_info.email,"profile_pic":"/media/"+str(user_info.profile_pic),"token":token_tuple[0].key},status=status.HTTP_200_OK)
+
+            try:
+                user_detail=UserDetails.objects.get(user=user)
+            
+            except:
+                is_new_user=True
+            
+            return Response({"username":user_info.username,"first_name":user_info.first_name,"last_name":user_info.last_name,"email":user_info.email,"profile_pic":"/media/"+str(user_info.profile_pic),"token":token_tuple[0].key,"is_new_user":is_new_user},status=status.HTTP_200_OK)
         else:
             return Response({"error":"Invalid credentials"},status=status.HTTP_401_UNAUTHORIZED)
 

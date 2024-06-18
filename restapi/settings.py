@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'exercises',
     'compressor',#tailwind
     'rest_framework.authtoken',
-    'django_apscheduler'#scheduler
+    'django_apscheduler',#scheduler
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -160,3 +161,8 @@ REST_FRAMEWORK = {
     ],
     'COERCE_DECIMAL_TO_STRING': False,
 }
+
+GRAPH_MODELS ={
+    'app_labels': ["exercises", "api"],
+    'graph_models': False,
+     }
