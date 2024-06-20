@@ -4,13 +4,15 @@
   }
 </style>
 {% extends "base.html" %}{% load static %} {% block content %}
+<div class="flex justify-between relative">
+<a href="{% url 'home' %}" class="items-start bg-blue-600 p-3 rounded-lg text-white m-3 absolute left-0">Back</a>
 
 <h1
-  class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl text-center mt-3"
+  class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl text-center mt-3 mx-auto"
 >
   Workouts
 </h1>
-
+</div>
 <div class="flex">
   <div
     class="flex w-1/6 flex-col justify-between bg-gray-300 border cushei overflow-auto"
