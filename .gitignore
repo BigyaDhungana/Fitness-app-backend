@@ -105,6 +105,7 @@ venv/
 ENV/ 
 env.bak/ 
 venv.bak/ 
+temp.py
 
 # mkdocs documentation 
 /site 
@@ -137,5 +138,5 @@ GitHub.sublime-settings
 !.vscode/extensions.json 
 .history
 
-./static/src/output.css
-./static/CACHE/css/
+/static/src/output.css
+/static/CACHE/css/

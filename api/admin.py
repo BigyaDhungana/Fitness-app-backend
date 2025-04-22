@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import AppUsers,UserDaily,UserDetails
+from .models import AppUsers,UserDaily,UserDetails,OTP
 from exercises.models import Exercises,PreDefinedWorkoutNames,PreDefinedWorkouts,CustomWorkoutNames,CustomWorkouts
 
 class AppUsersAdmin(admin.ModelAdmin):
@@ -21,6 +21,8 @@ class CustomWorkoutsNameAdmin(admin.ModelAdmin):
     list_display=[f.name for f in CustomWorkoutNames._meta.fields]
 class UsersDailyAdmin(admin.ModelAdmin):
     list_display=[f.name for f in UserDaily._meta.fields]
+class OTPAdmin(admin.ModelAdmin):
+    list_display=[f.name for f in OTP._meta.fields]
 
 
 admin.site.register(AppUsers,AppUsersAdmin)
@@ -31,3 +33,4 @@ admin.site.register(PreDefinedWorkoutNames,WorkoutNamesAdmin)
 admin.site.register(PreDefinedWorkouts,PreWorkoutsAdmin)
 admin.site.register(CustomWorkoutNames,CustomWorkoutsNameAdmin)
 admin.site.register(CustomWorkouts,CustomWorkoutsAdmin)
+admin.site.register(OTP,OTPAdmin)

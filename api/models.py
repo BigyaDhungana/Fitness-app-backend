@@ -32,3 +32,9 @@ class UserDaily(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+class OTP(models.Model):
+    pass
+    user=models.OneToOneField(AppUsers,on_delete=models.CASCADE)
+    latest_otp=models.CharField(max_length=6) #cannot be int cause of possible leading zeros 
+    created_at=models.DateTimeField(auto_now_add=True)

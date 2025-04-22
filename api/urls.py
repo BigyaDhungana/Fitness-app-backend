@@ -10,4 +10,5 @@ urlpatterns = [
     path('user-details/',views.add_user_details,name="user_details"),
     path('user-daily/',views.update_user_daily,name="user_daily"),
     path('get-graph-data/',views.get_data_for_graph,name="get_graph_data"),
+    path('verify-otp/',views.verify_otp,name="otp")
 ]
